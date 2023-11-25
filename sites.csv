@@ -1,3 +1,8 @@
 name,latest_post_time,latest_post_url
+<<<<<<< HEAD
 groups/jsmezbrna,2023-10-13 09:03:07,https://facebook.com/groups/jsmezbrna/posts/2021020178254284
 SonyElectronics,2023-10-12 19:02:14,https://facebook.com/SonyElectronics/posts/728690312635971
+=======
+sony,2023-10-16 18:05:50,https://facebook.com/sony/posts/648445180729429
+mxtrate,2023-10-15 17:35:03,https://facebook.com/mxtrate/posts/314509464523680
+>>>>>>> ed7c3d8 (Finalizing new integration of database manager.)
