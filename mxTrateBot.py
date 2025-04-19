@@ -13,10 +13,12 @@ from telegram.ext import (
 
 import scraper
 
-TOKEN = "6314433730:AAH4hg92Q7VnA24pXCNuZyS7o3G2kX6QCQQ"
+TOKEN = ""  # insert telegram group token
 FIELDNAMES = ["name", "latest_post_time", "latest_post_url"]
 GROUP_ID = -4058684648
 MY_ID = 6274617049
+LOGIN = ""  # insert email of the scraping facebook account
+PASSWORD = ""  # insert password of the scraping facebook account
 
 # conv handler constants
 ARE_YOU_SURE_ADD, SITE_CHECK, ARE_YOU_SURE_DEL, CONFIRMATION = range(4)
@@ -222,7 +224,7 @@ async def site_check(
     for _ in get_posts(
         site_to_add,
         pages=1,
-        credentials=("fbscraping@seznam.cz", "facebook1234"),
+        credentials=(LOGIN, PASSWORD),
     ):
         found = True
         break
