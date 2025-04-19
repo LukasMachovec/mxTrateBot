@@ -47,7 +47,6 @@ def main():
             ],
         },
         fallbacks=[CommandHandler("stop", exit_conv)],
-        fallbacks=[CommandHandler("stop", exit_conv)],
     )
 
     conv_delsite_handler = ConversationHandler(
@@ -63,7 +62,6 @@ def main():
                 MessageHandler(filters.Regex("^(Ne)$"), conv_del),
             ],
         },
-        fallbacks=[CommandHandler("stop", exit_conv)],
         fallbacks=[CommandHandler("stop", exit_conv)],
     )
 
@@ -151,9 +149,6 @@ async def are_you_sure_del(
             keyboard,
             one_time_keyboard=True,
             input_field_placeholder="Ano / Ne?",
-            keyboard,
-            one_time_keyboard=True,
-            input_field_placeholder="Ano / Ne?",
         ),
     )
     return CONFIRMATION
@@ -171,9 +166,6 @@ async def are_you_sure_add(
         chat_id=GROUP_ID,
         disable_web_page_preview=True,
         reply_markup=ReplyKeyboardMarkup(
-            keyboard,
-            one_time_keyboard=True,
-            input_field_placeholder="Ano / Ne?",
             keyboard,
             one_time_keyboard=True,
             input_field_placeholder="Ano / Ne?",
@@ -233,14 +225,12 @@ async def site_check(
         add_site(list_of_sites, posts[0])
         await context.bot.send_message(
             text="Stránka úspěšně přidána!",
-            text="Stránka úspěšně přidána!",
             chat_id=GROUP_ID,
         )
         return ConversationHandler.END
 
     else:
         await context.bot.send_message(
-            text="CHYBA OVĚŘENÍ",
             text="CHYBA OVĚŘENÍ",
             chat_id=GROUP_ID,
         )
