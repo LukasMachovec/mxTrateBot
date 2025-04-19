@@ -1,9 +1,9 @@
-from mxTrateBot import TOKEN, GROUP_ID
+from time import sleep
+from mxTrateBot import TOKEN, GROUP_ID, LOGIN, PASSWORD
 from datetime import datetime
 from facebook_scraper import get_posts
 import requests
 import databaseManager
-
 
 database = databaseManager.database
 
@@ -17,9 +17,12 @@ def scraper():
                 continue
             elif len(new_posts) == 1:
                 send_msg(f"Nový příspěvek od {new_posts[0]['name']}\n{new_posts[0]['latest_post_url']}")
+                database.update_site(new_posts[0])
             else:
                 for i in range(len(new_posts) - 1, -1, -1):
                     send_msg(f"Nový příspěvek od {new_posts[i]['name']}\n{new_posts[i]['latest_post_url']}")
+                database.update_site(new_posts[0])
+            sleep(60.0 / len(sites))
     assert False
 
 
@@ -37,7 +40,7 @@ def search(site_name: str, time: str or None) -> list:
     post_index = 0
 
     # Searches from the newest to the oldest
-    for post in get_posts(site_name, pages=1, credentials=("borivojhromadkafb@seznam.cz", "facebook1234")):
+    for post in get_posts(site_name, pages=1, credentials=(LOGIN, PASSWORD)):
         if post["time"] > old_post_time:
             posts.append(post)
         post_index += 1

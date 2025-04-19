@@ -20,6 +20,7 @@ def database_processor():
         elif not database.remove_queue.empty():
             _remove_site(database.remove_queue.get())
             database.remove_queue.task_done()
+        print("Database processor")
         CONDITION_OBJECT.release()
     assert False
 
@@ -37,22 +38,29 @@ class DatabaseManager:
 
     def add_site(self, post):
         self.add_queue.put(post)
+        with CONDITION_OBJECT:
+            CONDITION_OBJECT.notify()
 
     def update_site(self, post):
         self.update_queue.put(post)
+        with CONDITION_OBJECT:
+            CONDITION_OBJECT.notify()
 
     def remove_site(self, site_name: str):
         self.remove_queue.put(site_name)
+        with CONDITION_OBJECT:
+            CONDITION_OBJECT.notify()
 
 
 database = DatabaseManager()
 
 
 def _add_site(post):
+    database.sites.append(post)
     with open("sites.csv", "w", newline="") as file:
         writer = DictWriter(file, fieldnames=DATABASE_FIELDNAMES)
         writer.writeheader()
-        writer.writerows(post)
+        writer.writerows(database.sites)
 
 
 def _update_site(post):

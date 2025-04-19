@@ -14,14 +14,20 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, ContextTypes, CommandHandler, MessageHandler, filters, ConversationHandler
 import scraper
 import databaseManager
+import threading
 
 
 TOKEN = "6314433730:AAH4hg92Q7VnA24pXCNuZyS7o3G2kX6QCQQ"
 >>>>>>> ed7c3d8 (Finalizing new integration of database manager.)
 GROUP_ID = -4058684648
 MY_ID = 6274617049
+<<<<<<< HEAD
 LOGIN = ""  # insert email of the scraping facebook account
 PASSWORD = ""  # insert password of the scraping facebook account
+=======
+LOGIN = 'petr.maly.fb@seznam.cz'
+PASSWORD = 'facebook1234'
+>>>>>>> 476c97e (uploading local files)
 
 # conv handler constants
 <<<<<<< HEAD
@@ -49,7 +55,6 @@ remove_site_index: int or None = None
 database = databaseManager.database
 
 
-#
 def main():
     application = Application.builder().token(TOKEN).build()
     conv_addsite_handler = ConversationHandler(
@@ -82,6 +87,12 @@ def main():
     application.add_handler(conv_addsite_handler)
     application.add_handler(conv_delsite_handler)
 
+    scraper_func = threading.Thread(target=scraper.scraper)
+    database_manager_func = threading.Thread(target=databaseManager.database_processor)
+
+    database_manager_func.start()
+    scraper_func.start()
+    print("started")
     application.run_polling()
 <<<<<<< HEAD
 =======
@@ -274,6 +285,7 @@ async def confirm_del(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     assert remove_site_index is not None
     name = database.sites[remove_site_index]["name"]
     database.remove_site(name)
+    #databaseManager.CONDITION_OBJECT.notify()
     scraper.send_msg("Stránka byla odebrána!")
     return ConversationHandler.END
 
@@ -285,21 +297,26 @@ async def site_check(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         scraper.send_msg("Stránka se již sleduje.")
         return await conv_add(update, context)
 
-    found = False
-    for _ in get_posts(site_to_add, pages=1, credentials=("fbscraping@seznam.cz", "facebook1234")):
-        found = True
-        break
-    if found:
+    for _ in get_posts(site_to_add, pages=1, credentials=(LOGIN, PASSWORD)):
         posts = scraper.search(site_to_add, None)
         newest_post = posts[0]
         database.add_site(newest_post)
         scraper.send_msg("Stránka úspěšně přidána!")
         return ConversationHandler.END
 
+<<<<<<< Updated upstream
     else:
         scraper.send_msg("CHYBA OVĚŘENÍ")
         return await conv_add(update, context)
+<<<<<<< HEAD
 >>>>>>> ed7c3d8 (Finalizing new integration of database manager.)
+=======
+>>>>>>> ed7c3d8 (Finalizing new integration of database manager.)
+=======
+    scraper.send_msg("CHYBA OVĚŘENÍ")
+    return await conv_add(update, context)
+>>>>>>> Stashed changes
+>>>>>>> 476c97e (uploading local files)
 
 
 async def exit_conv(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
